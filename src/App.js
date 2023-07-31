@@ -9,25 +9,24 @@ function App() {
 
   repoURL = repoURL.trim();
   repoURL = repoURL.replace("https://github.com/", "");
+  // console.log(repoURL);
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
-    searchIssues();
-  };
-
-  function searchIssues() {
     setLoading(true);
-    axios({
-      method : "get",
-      url: `https://api.github.com/repos/${repoURL}/issues?labels=good%20first%20issue&&state=open`,
-    }).then(res => {
+    try {
+      const response = await axios.post('http://localhost:5000/getGFI', null, {params : {repoURL}});
+      console.log(response.data);
       setLoading(false);
-      setIssues(res.data);
-    });
+      setIssues(response.data);
+      console.log(issues);
+    } catch (error) {
+      console.error('Error fetching issues in front', error);
+      setLoading(false);
+    }
   }
 
   function renderIssues(issues) {
-
     let websiteURL = (issues.url).replace("https://api.github.com/repos", "https://github.com/")
     return (
       <div className='row' key={issues.number}>
@@ -43,15 +42,16 @@ function App() {
         <form className='form'>
           <input
             className='input'
-            value = {repoURL}
+            value={repoURL}
             placeholder='Paste the Repo URL'
             onChange={e => setURL(e.target.value)}
+            required
           />
           <button className='repoButton' onClick={handleSubmit}> {loading ? "Searching..." : "Search"} </button>
         </form>
       </div>
       <div className='issues'>
-        {issues.map(renderIssues)};
+        {issues.map(renderIssues)}
       </div>
     </div>
   );

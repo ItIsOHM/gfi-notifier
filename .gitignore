@@ -117,3 +117,4 @@ Thumbs.db
 !.gitignore
 !.nvmrc
 !.phpcs.xml.dist
+src/issues.json
