@@ -43,13 +43,6 @@ function App() {
     repoURL = repoURL.replace("https://github.com/", "");
     // console.log(repoURL);
 
-    // useState(() => {
-    //   if(!repoURL.startsWith("https://github.com/")) {
-    //     setError("Please enter a valid GitHub repository URL");
-    //   return;
-    //   }
-    // });
-
     if(sendEmails && !email.trim()) {
       setError("Email field cannot be empty.");
       return;
@@ -63,14 +56,26 @@ function App() {
       const response = await axios.post('http://localhost:5000/getGFI', null, {params : {repoURL}});
       // console.log(response.data);
       setLoading(false);
-      setIssues(response.data);
+      if(response.data == 0) 
+        setError("No GFI issues found in this repo.")
+      else 
+        setIssues(response.data);
       // console.log(issues);
       if(sendEmails) {
       try {
         const response = await axios.post('http://localhost:5000/subscribe', null, {params : {repoURL, email}});
         console.log(response.data);
       } catch (error) {
-        setError("Couldn't connect to the database. Please try again.");
+        if (error.response) {
+          const { status, data } = error.response;
+          if (status === 400) {
+            setError("You are already subscribed!"); // Display the error message received from the server.
+          } else {
+            setError('Something went wrong. Please try again later.'); // Generic error message for other cases.
+          }
+        } else {
+          setError('Network error. Please check your internet connection.'); // Error when server is not reachable.
+        }
         setLoading(false);
       }
     }
