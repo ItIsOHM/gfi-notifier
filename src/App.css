@@ -1,18 +1,178 @@
-.homePage {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+@keyframes rotate {
+  from {
+    rotate: 0deg;
+  }
+  
+  50% {
+    scale: 1 1.5;
+  }
+  
+  to {
+    rotate: 360deg;
+  }
 }
 
-h1 {
+body {
+  overflow: hidden;
+}
+
+@keyframes gradient {
+  0% {background-position: 0%}
+  100% {background-position: 100%}
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+
+.mainApp {
+  background-color:black;
+  height: 100vh;
+  display: grid;
+  place-items: center;
+}
+
+/* * {
+  cursor: none;
+} */
+
+/* 
+.cursor {
+  background: linear-gradient(45deg,#F17C58, #24AADB , #27DBB1);
+  background-size: 600% 100%;
+  animation: gradient 10s linear infinite;
+  animation-direction: alternate;
+  height: 32px;
+  width: 32px;
+  border-radius: 50%;
+  position: fixed;
+  top:0;
+  left:0;
+  pointer-events: none;
+} */
+
+#blob {
+  background-color: rgb(131, 131, 131);
+  height: 34vmax;
+  aspect-ratio: 1;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  translate: -50% -50%;
+  border-radius: 50%;
+  background: linear-gradient(45deg,#F17C58, #24AADB , #27DBB1);
+  background-size: 600% 100%;
+  animation: rotate 20s infinite;
+  animation: gradient 10s linear infinite;
+  animation-direction: alternate;
+  opacity: 1;
+}
+
+#blur {
+  height: 100vh;
+  width: 100vw;
+  position: absolute;
+  z-index: 0;
+  margin: 0;
+  backdrop-filter: blur(12vmax);
+}
+
+#homePage {
+  background-color: #292966;
+  width: 75vw;
+  height: 50vh;
+  margin: 0;
+  display: grid;
+  align-content: center;
+  justify-content: center;
+  font-family: 'Space Mono', monospace;
+  font-size: calc(10px + 2vmin);
+  color: rgb(233, 233, 233);
+}
+
+#formFields {
+  z-index: 1;
+  padding-top: 5vh;
+}
+
+h1, h2 {
+  z-index: 1;
+  font-family: 'Space Mono', monospace;
   position:relative;
+  text-align: center;
+  margin: 0 auto;
+}
+
+h2 {
+  font-size: calc(10px + 2vmin);
+}
+
+.form {
+  display: grid;
+}
+
+.repoInput, .emailInput, .searchButton {
+  font-family: 'Space Mono', monospace;
+  height: 5vh;
+  border-radius: 25px;
+  border: solid transparent;
+}
+
+.repoInput, .emailInput {
+  padding-left: 2vh;
+}
+
+.emailLabel {
+  margin-top: 5vh;
+}
+
+.error {
+  margin-top: 5vh;
+}
+
+.searchButton {
+  background: linear-gradient(45deg, #24AADB , #27DBB1);
+  background-size: 600% 200%;
+  transition: all 0.5s ease-in-out;
+  animation: gradient 1s linear infinite;
+  animation-direction: alternate;
+  backdrop-filter: blur(12vmax);
+  margin-top: 2vh;
+}
+.searchButton:hover {
+  background: linear-gradient(45deg , #db8924 , #cfdb27);
+  background-size: 500% 100%;
+  background-position: 50% 0;
+  cursor: pointer;
+}
+
+.issues {
+  height: 25vh;
+  z-index: 1;
+  color: aliceblue;
+  overflow: scroll;
+}
+
+.issues::-webkit-scrollbar{
+  width: 1rem !important;
+}
+.issues::-webkit-scrollbar-corner{
+  background: rgba(0,0,0,0);
+}
+.issues::-webkit-scrollbar-thumb{
+  height: 1rem;
+  border-radius: 0.5rem;
+  background-clip: content-box;
+  background-color: #F17C58;
+  animation: gradient 16s linear infinite;
+  background-size: 600% 100%;
+}
+.issues::-webkit-scrollbar-thumb:hover {
+  background-color: #E94584;
 }
 
 .row {
-  font-size: x-small;
+  /* height: 10vh; */
+  font-family: 'Space Mono', monospace;
+  /* font-style: bold; */
+  font-weight: 400;
+  font-size: small;
 }

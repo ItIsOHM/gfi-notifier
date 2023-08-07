@@ -9,8 +9,8 @@ function App() {
   const [issues, setIssues] = useState([]);
   const [error, setError] = useState("");
   const [sendEmails, setSendEmails] = useState(false);
-
-  email = email.trim();
+  let [isValidEmail, setIsValidEmail] = useState(true);
+  const [mousePosition, setMousePosition] = useState({ left: 0, top: 0 });
 
   const handleRepoURLChange = (e) => {
     setURL(e.target.value);
@@ -22,9 +22,17 @@ function App() {
   }, [repoURL]);
 
   const handleEmailChange = (e) => {
-    setEmail(e.target.value);
+    const inputEmail = e.target.value;
+    setEmail(inputEmail);
+    setIsValidEmail(validateEmail(inputEmail));
     setError("");
   }
+
+  const validateEmail = (email) => {
+    // Regular expression to validate the email format
+    const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
+    return emailRegex.test(email);
+  };
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -43,8 +51,15 @@ function App() {
     repoURL = repoURL.replace("https://github.com/", "");
     // console.log(repoURL);
 
+    email = email.trim();
+
     if(sendEmails && !email.trim()) {
       setError("Email field cannot be empty.");
+      return;
+    }
+
+    if(!isValidEmail) {
+      setError("Invalid email address.");
       return;
     }
 
@@ -52,11 +67,10 @@ function App() {
     setError("");
 
     try {
-      
       const response = await axios.post('http://localhost:5000/getGFI', null, {params : {repoURL}});
       // console.log(response.data);
       setLoading(false);
-      if(response.data == 0) 
+      if(response.data === 0) 
         setError("No GFI issues found in this repo.")
       else 
         setIssues(response.data);
@@ -84,53 +98,110 @@ function App() {
       setError("Couldn't find the repo, please check the repo URL again.");
       setLoading(false);
     }
-
-    
   }
 
   function renderIssues(issues) {
-    let websiteURL = (issues.url).replace("https://api.github.com/repos", "https://github.com/")
+    let websiteURL = (issues.url).replace("https://api.github.com/repos", "https://github.com/");
     return (
       <div className='row' key={issues.number}>
-        <a href={websiteURL} target="_blank">{issues.title}</a>
+        <p>Issue Name : {issues.title}<br/>
+        <a href={websiteURL} target="_blank">Click here</a><br/>
+        Raised by : {issues.user.login}<br/>
+        Created at : {issues.created_at}</p>
       </div>
     );
   }
 
+  useEffect(() => {
+    const handleMouseOver = (event) => {
+      const letters = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+      let iteration = 0;
+      let interval = null;
+
+      clearInterval(interval);
+
+      interval = setInterval(() => {
+        event.target.innerText = event.target.innerText
+          .split("")
+          .map((letter, index) => {
+            if (index < iteration) {
+              return event.target.dataset.value[index];
+            }
+
+            return letters[Math.floor(Math.random() * 62)];
+          })
+          .join("");
+
+        if (iteration >= event.target.dataset.value.length) {
+          clearInterval(interval);
+        }
+
+        iteration += 0.5;
+      }, 30);
+    };
+
+    const h1Element = document.querySelector("h1");
+    h1Element.addEventListener("mouseover", handleMouseOver);
+    
+    return () => {
+      h1Element.removeEventListener("mouseover", handleMouseOver);
+    };
+  }, []);
+  
+  const handleMousePointerMove = (event) => {
+    const { clientX, clientY } = event;
+    setMousePosition({ left: clientX, top: clientY });
+  };
+
+  useEffect(() => {
+    document.addEventListener('pointermove', handleMousePointerMove);
+    return () => {
+      document.removeEventListener('pointermove', handleMousePointerMove);
+    };
+  }, []);
+  
   return (
-    <div className='homePage'>
-      <h1> Github GFI Notifier</h1>
-      <div className='formFields'>
-        <form className='form'>
-          <input
-            className='repoInput'
-            value={repoURL}
-            placeholder='Paste the Repo URL'
-            onChange={handleRepoURLChange}
-            required
-          />
-          {sendEmails && <input
-            className='emailInput'
-            value={email}
-            placeholder='Enter your email ID'
-            onChange={handleEmailChange}
-            required = {sendEmails}
-          />}
-          <button className='repoButton' onClick={handleSubmit}> {loading ? "Searching..." : "Search"} </button>
-          {error && <div className='error'>{error}</div>}
-          <label>
+    <div className='mainApp'>
+      <div id="blob" style={{ left: `${mousePosition.left}px`, top: `${mousePosition.top}px` }}></div>
+      <div id="blur"></div>
+      <div id='homePage'>
+        <h2 data-value="Welcome to"> Welcome to</h2>
+        <h1 data-value="Github GFI Notifier">GitHub GFI Notifier</h1>
+        <div id='formFields'>
+          <form className='form'>
+            <label className='inputLabel'>Enter the Github Repo URL here:</label>
             <input
-              className='emailOpt'
-              type='checkbox'
-              checked={sendEmails}
-              onChange={(e) => setSendEmails(e.target.checked)}
+              className='repoInput'
+              value={repoURL}
+              placeholder='Paste the Repo URL'
+              onChange={handleRepoURLChange}
+              required
             />
-            {'Opt me in for emails whenever a new GFI on this repo is raised.'}
-          </label>
-        </form>
-      </div>
-      <div className='issues'>
-        {issues.map(renderIssues)}
+            {sendEmails && <label className='emailLabel'>Enter the Email ID here:</label>}
+            {sendEmails && <input
+              className='emailInput'
+              value={email}
+              placeholder='Enter your email ID'
+              onChange={handleEmailChange}
+              required = {sendEmails}
+              />}
+            {error && <div className='error'>{error}</div>}
+            <button className='searchButton' onClick={handleSubmit}> {loading ? "Searching..." : "Search"} </button>
+            <label>
+              <input
+                className='emailOpt'
+                type='checkbox'
+                checked={sendEmails}
+                onChange={(e) => setSendEmails(e.target.checked)}
+              />
+              {'Opt me in for emails whenever a new GFI on this repo is raised.'}
+            </label>
+          </form>
+        </div>
+        <div className='issues'>
+          {issues.map(renderIssues)}
+        </div>
+              <div className='cursor' style={{ left: `${mousePosition.left}px`, top: `${mousePosition.top}px` }}/>
       </div>
     </div>
   );
