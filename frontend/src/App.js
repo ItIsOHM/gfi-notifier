@@ -67,7 +67,7 @@ function App() {
     setError("");
 
     try {
-      const response = await axios.post('https://gfi-notifier.vercel.app/getGFI', null, {params : {repoURL}});
+      const response = await axios.post('https://gfi-notifier-api.vercel.app/getGFI', null, {params : {repoURL}});
       // console.log(response.data);
       setLoading(false);
       if(response.data === 0) 
@@ -77,7 +77,7 @@ function App() {
       // console.log(issues);
       if(sendEmails) {
       try {
-        const response = await axios.post('https://gfi-notifier.vercel.app/subscribe', null, {params : {repoURL, email}});
+        const response = await axios.post('https://gfi-notifier-api.vercel.app/subscribe', null, {params : {repoURL, email}});
         console.log(response.data);
       } catch (error) {
         if (error.response) {
