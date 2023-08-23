@@ -45,5 +45,16 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "now": {
+    "version": 2,
+    "builds": [
+      { "src": "server.js", "use": "@vercel/node" },
+      { "src": "build/**", "use": "@vercel/static" }
+    ],
+    "routes": [
+      { "src": "/api/(.*)", "dest": "server.js" },
+      { "src": "/(.*)", "dest": "build/$1" }
+    ]
   }
 }

@@ -128,6 +128,10 @@ h2 {
   margin-top: 5vh;
 }
 
+.emailOptInLabel{
+  margin-top: 2vh;
+}
+
 .searchButton {
   background: linear-gradient(45deg, #24AADB , #27DBB1);
   background-size: 600% 200%;

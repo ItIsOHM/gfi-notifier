@@ -187,7 +187,7 @@ function App() {
               />}
             {error && <div className='error'>{error}</div>}
             <button className='searchButton' onClick={handleSubmit}> {loading ? "Searching..." : "Search"} </button>
-            <label>
+            <label class="emailOptInLabel">
               <input
                 className='emailOpt'
                 type='checkbox'

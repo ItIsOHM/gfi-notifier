@@ -118,3 +118,5 @@ Thumbs.db
 !.nvmrc
 !.phpcs.xml.dist
 src/issues.json
+
+.vercel
