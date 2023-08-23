@@ -19,6 +19,10 @@ const DB_URL = process.env.DB_URI;
 app.use(express.json());
 app.use(cors());
 
+app.get('/', async (req, res) => {
+  res.json("Hello World.")
+});
+
 app.post('/getGFI', async (req, res) => {
   const repo = req.query.repoURL;
   // console.log(repo);
