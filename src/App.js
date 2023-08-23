@@ -94,7 +94,7 @@ function App() {
       }
     }
     } catch (error) {
-      // console.error('Error fetching issues in front', error);
+      console.error('Error fetching issues in front', error);
       setError("Couldn't find the repo, please check the repo URL again.");
       setLoading(false);
     }

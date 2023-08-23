@@ -22,7 +22,9 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "concurrently \"npm run server\" \"npm run client\"",
+    "server": "node src/server.js",
+    "client": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
@@ -49,12 +51,27 @@
   "now": {
     "version": 2,
     "builds": [
-      { "src": "server.js", "use": "@vercel/node" },
-      { "src": "build/**", "use": "@vercel/static" }
+      {
+        "src": "server.js",
+        "use": "@vercel/node"
+      },
+      {
+        "src": "build/**",
+        "use": "@vercel/static"
+      }
     ],
     "routes": [
-      { "src": "/api/(.*)", "dest": "server.js" },
-      { "src": "/(.*)", "dest": "build/$1" }
+      {
+        "src": "/api/(.*)",
+        "dest": "server.js"
+      },
+      {
+        "src": "/(.*)",
+        "dest": "build/$1"
+      }
     ]
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.1"
   }
 }
