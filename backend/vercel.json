@@ -8,10 +8,5 @@
           "src": "/(.*)",
           "dest": "/api"
         }
-    ],
-    "rewrites": [
-      { 
-        "source": "/(.*)", "destination": "/api" 
-      }
     ]
 }
