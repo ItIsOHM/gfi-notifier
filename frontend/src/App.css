@@ -30,25 +30,6 @@ body {
   place-items: center;
 }
 
-/* * {
-  cursor: none;
-} */
-
-/* 
-.cursor {
-  background: linear-gradient(45deg,#F17C58, #24AADB , #27DBB1);
-  background-size: 600% 100%;
-  animation: gradient 10s linear infinite;
-  animation-direction: alternate;
-  height: 32px;
-  width: 32px;
-  border-radius: 50%;
-  position: fixed;
-  top:0;
-  left:0;
-  pointer-events: none;
-} */
-
 #blob {
   background-color: rgb(131, 131, 131);
   height: 34vmax;
@@ -114,6 +95,7 @@ h2 {
   height: 5vh;
   border-radius: 25px;
   border: solid transparent;
+  font-size: large;
 }
 
 .repoInput, .emailInput {

@@ -1,6 +1,7 @@
 import './App.css';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import GithubCorner from 'react-github-corner';
 
 function App() {
   let [repoURL, setURL] = useState("");
@@ -166,14 +167,14 @@ function App() {
       <div id="blur"></div>
       <div id='homePage'>
         <h2 data-value="Welcome to"> Welcome to</h2>
-        <h1 data-value="Github GFI Notifier">GitHub GFI Notifier</h1>
+        <h1 data-value="GitNotify">GitNotify</h1>
         <div id='formFields'>
           <form className='form'>
             <label className='inputLabel'>Enter the Github Repo URL here:</label>
             <input
               className='repoInput'
               value={repoURL}
-              placeholder='Paste the Repo URL'
+              placeholder='ex: https://github.com/ItIsOHM/gfi-notifier'
               onChange={handleRepoURLChange}
               required
             />
@@ -203,6 +204,19 @@ function App() {
         </div>
               <div className='cursor' style={{ left: `${mousePosition.left}px`, top: `${mousePosition.top}px` }}/>
       </div>
+              <GithubCorner
+                href="https://github.com/itisohm"
+                target="_blank"
+                octoColor="#fff"
+                size={100}
+                direction="right"
+                style={{
+                  position : 'absolute',
+                  top: 0 +'px',
+                  right: 0 + 'px'
+                }}
+                bannerColor = "#0005"
+              />
     </div>
   );
 }
