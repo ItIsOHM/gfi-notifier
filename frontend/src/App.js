@@ -100,7 +100,7 @@ function App() {
     setError("");
 
     try {
-      const response = await axios.post('http://localhost:5000/getGFI', null, {params : {repoURL}});
+      const response = await axios.post('https://gfi-notifier-api.vercel.app/getGFI', null, {params : {repoURL}});
 
       setLoading(false);
       if(response.data.length === 0)
@@ -110,7 +110,7 @@ function App() {
 
       if(sendEmails) {
       try {
-        const response = await axios.post('http://localhost:5000/subscribe', null, {params : {repoURL, email}});
+        const response = await axios.post('https://gfi-notifier-api.vercel.app/subscribe', null, {params : {repoURL, email}});
         console.log(response.data);
         showSubSuccessMessage();
       } catch (error) {
