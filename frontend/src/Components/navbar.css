@@ -1,0 +1,89 @@
+nav {
+    z-index: 1000;
+    font-family: 'Space Mono', monospace;
+    position:fixed;
+    width: 100vw;
+    height: 100px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    top: 0;
+    background: linear-gradient(to bottom, #292966, rgba(0, 0, 0, 0));
+    box-shadow: 0px 0px 8px #89b6ff;
+    transition: box-shadow 0.3s ease-in-out;
+    animation: changeBoxShadowColor 5s ease-in-out infinite alternate;
+    backdrop-filter: blur(12vmax);
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+    transform: translateZ(0);
+}
+
+@keyframes changeBoxShadowColor {
+    0% {
+        box-shadow: 0px 1px 8px #89b6ff;
+    }
+    50% {
+        box-shadow: 0px 1px 8px #56aece;
+    }
+    100% {
+        box-shadow: 0px 1px 8px #89b6ff;
+    }
+}
+
+#navbar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    padding: 0 0;
+}
+
+#navbar li {
+    list-style: none;
+    padding: 0 20px;
+    position: relative;
+}
+
+#navbar li a{
+    text-decoration: none;
+    font-size: large;
+    color: #fff;
+    transition: 0.1s ease;
+    /* margin: 5px 5px; */
+    border: #0000;
+    border-width: 2px;
+    border-style: solid;
+    border-radius: 10px;
+    padding: 10px 10px;
+}
+
+#navbar li a:hover, #navbar li a.active{
+    color: rgb(255, 255, 255);
+    border: #fff;
+    border-width: 2px;
+    border-style: solid;
+    border-radius: 10px;
+}
+
+#navbar li a:hover {
+    border-width: 5px;
+}
+/* 
+#navbar li a:hover::after, #navbar li a.active::after {
+    content: "";
+    width: 10%;
+    height: 2px;
+    background: #17a7cf;
+    position: absolute;
+    bottom: -4px;
+    left: 20px;
+} */
+
+.github-corner-container {
+    position: absolute;
+    bottom: 70px;
+    right: 50px;
+    z-index: 1000;
+    transform: rotate(-42deg);
+}

@@ -1,6 +1,3 @@
-// import { Axios } from 'axios';
-// import { Express } from 'express';
-
 const express = require('express');
 const axios = require('axios');
 const cors = require('cors');
@@ -89,28 +86,21 @@ const sendGFIEmail = async (repoURL) => {
       const latestIssueID = issues[0].number;
 
       if(latestIssueID > lastProcessedIssueId) {
-        subscribed.forEach((sub) => {
+        subscribed.forEach(async (sub) => {
           if(sub.lastProcessedIssueId < latestIssueID) {
             const subject = `A new GFI has been raised in ${repoURL}!`;
             const text = `A new Good First Issue has been raised in the repository: ${repoURL}\n\nIssue Title: ${issues[0].title}\n\nIssue URL: ${(issues[0].url).replace("https://api.github.com/repos", "https://github.com/")}`;
             const mailOptions = {
-              from: process.env.EMAIL_USER,
+              from: 'Rhythm from GitNotify <' + process.env.EMAIL_USER + '>',
               to: sub.email,
               subject: subject,
               text: text,
             };
 
-            transporter.sendMail(mailOptions, (error, info) => {
-              if(error) {
-                console.log('Error sending GFI email:', error);
-              }
-              else {
-                console.log('GFI email sent:', info.response);
-              }
-            });
+            transporter.sendMail(mailOptions);
 
             sub.lastProcessedIssueId = latestIssueID;
-            sub.save();
+            await sub.save();
           }
         });
       }
@@ -143,7 +133,7 @@ app.post('/subscribe', async (req, res) => {
   const existingSub = await Subscription.findOne({repoURL, email});
 
   if(existingSub) {
-    return res.status(400).json({
+    return res.status(500).json({
       error : 'You are already subscribed to this repository.'
     })
   }

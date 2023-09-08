@@ -1,33 +1,20 @@
-@keyframes rotate {
-  from {
-    rotate: 0deg;
-  }
-  
-  50% {
-    scale: 1 1.5;
-  }
-  
-  to {
-    rotate: 360deg;
-  }
-}
-
 body {
-  overflow: hidden;
+  overflow-x: hidden;
+  background-color: #000000;
+  display: flex;
+  /* justify-content: center; */
+  /* align-items: center; */
+  height: 100vh;
+  margin: 0;
+  padding: 0;
 }
-
-@keyframes gradient {
-  0% {background-position: 0%}
-  100% {background-position: 100%}
-}
-
-@import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap');
 
 .mainApp {
   background-color:black;
-  height: 100vh;
-  display: grid;
-  place-items: center;
+  /* height: 100%; */
+  display: flex;
+  justify-content: center;
+  /* align-items: center; */
 }
 
 #blob {
@@ -39,47 +26,55 @@ body {
   top: 50%;
   translate: -50% -50%;
   border-radius: 50%;
-  background: linear-gradient(45deg,#F17C58, #24AADB , #27DBB1);
+  background: linear-gradient(45deg,#5893f1, #24AADB , #27DBB1);
   background-size: 600% 100%;
   animation: rotate 20s infinite;
   animation: gradient 10s linear infinite;
   animation-direction: alternate;
   opacity: 1;
+  z-index: 1;
+  @media (hover: none) {
+    position: fixed;
+  }
+  @media (max-width: 500px) {
+    animation: none;
+  }
 }
 
 #blur {
-  height: 100vh;
-  width: 100vw;
-  position: absolute;
-  z-index: 0;
+  height: 100%;
+  width: 100%;
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  z-index: 2;
   margin: 0;
   backdrop-filter: blur(12vmax);
 }
 
-#homePage {
+.main {
   background-color: #292966;
   width: 75vw;
-  height: 50vh;
-  margin: 0;
-  display: grid;
-  align-content: center;
+  max-width: 800px;
+  height: fit-content;
+  margin: 75px 0;
+  display: flex;
+  /* align-content: center; */
   justify-content: center;
+  flex-direction: column;
   font-family: 'Space Mono', monospace;
   font-size: calc(10px + 2vmin);
   color: rgb(233, 233, 233);
-}
-
-#formFields {
-  z-index: 1;
-  padding-top: 5vh;
+  /* position: fixed; */
+  /* top: 150px; */
 }
 
 h1, h2 {
-  z-index: 1;
   font-family: 'Space Mono', monospace;
   position:relative;
   text-align: center;
   margin: 0 auto;
+  z-index: 999;
 }
 
 h2 {
@@ -88,14 +83,34 @@ h2 {
 
 .form {
   display: grid;
+  z-index: 999;
+  padding-top: 5vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.opacity-animated {
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
 }
 
 .repoInput, .emailInput, .searchButton {
   font-family: 'Space Mono', monospace;
   height: 5vh;
-  border-radius: 25px;
+  border-radius: 15px;
   border: solid transparent;
-  font-size: large;
+  font-size: 0.75em;
+}
+
+@media (max-width: 500px) {
+  .repoInput, .emailInput {
+    font-size: 0.65em;
+  }
+}
+
+.inputLabel, .emailLabel {
+  margin-bottom: 0.5em;
+  font-size: 1em;
 }
 
 .repoInput, .emailInput {
@@ -107,11 +122,33 @@ h2 {
 }
 
 .error {
-  margin-top: 5vh;
+  margin-top: 2vh;
+  font-size: 0.8em;
+  color: hsl(0, 79%, 59%);
+  font-weight: bold;
 }
 
-.emailOptInLabel{
+.emailOpt {
+  display: flex;
+  align-items: baseline;
+}
+
+.emailOptInLabel {
   margin-top: 2vh;
+  margin-bottom: 2vh;
+  margin-left: 0.5vw;
+  font-size: 0.7em;
+
+  @media (max-width: 500px) {
+    font-size: 1rem;
+  }
+}
+
+.searchButtonContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 0;
 }
 
 .searchButton {
@@ -121,8 +158,9 @@ h2 {
   animation: gradient 1s linear infinite;
   animation-direction: alternate;
   backdrop-filter: blur(12vmax);
-  margin-top: 2vh;
+  width: 20rem;
 }
+
 .searchButton:hover {
   background: linear-gradient(45deg , #db8924 , #cfdb27);
   background-size: 500% 100%;
@@ -131,13 +169,21 @@ h2 {
 }
 
 .issues {
-  height: 25vh;
-  z-index: 1;
+  height: 200px;
+  width: 75vw;
+  max-width: 800px;
+  z-index: 999;
   color: aliceblue;
-  overflow: scroll;
+  background-color: rgba(255,255,255,0.1);
+  border-radius: 0.5rem;
+  padding: 0 0;
+  margin-top: 2vh;
+  overflow-y: scroll;
+  overflow-x: hidden;
 }
 
 .issues::-webkit-scrollbar{
+  /* scrollbar-width: none;  */
   width: 1rem !important;
 }
 .issues::-webkit-scrollbar-corner{
@@ -155,10 +201,51 @@ h2 {
   background-color: #E94584;
 }
 
-.row {
+.issue-row {
   /* height: 10vh; */
   font-family: 'Space Mono', monospace;
   /* font-style: bold; */
   font-weight: 400;
-  font-size: small;
+  font-size: medium;
+  margin-left: 20px;
 }
+
+.truncate-text {
+  /* display: inline-block; */
+  /* max-width: 100%; */
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.issue-url, .user-url {
+  color: #F17C58;
+  text-decoration: none;
+}
+
+.ext-svg {
+  fill: #F17C58;
+  width: 12px;
+  height: 12px;
+}
+
+@keyframes rotate {
+  from {
+    rotate: 0deg;
+  }
+  
+  50% {
+    scale: 1 1.5;
+  }
+  
+  to {
+    rotate: 360deg;
+  }
+}
+
+@keyframes gradient {
+  0% {background-position: 0%}
+  100% {background-position: 100%}
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap');

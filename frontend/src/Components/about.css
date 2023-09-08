@@ -1,0 +1,102 @@
+.about-para {
+    font-size: 0.7em;
+    margin: 0 0;
+    margin-top: 1em;
+    margin-bottom: 0.6em;
+    @media (max-width: 768px) {
+        font-size: 1.1rem;
+    }
+}
+
+.hero-text {
+    font-weight: bold;
+}
+
+.links-container {
+    display: grid;
+    grid-auto-flow: column;
+    gap: 5px;
+    @media (max-width: 550px) {
+        grid-auto-flow: row;
+    }
+}
+
+.twitter-container, .linkedin-container, .github-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    /* height: 20vh; */
+    width: fit-content;
+    margin: 5px 0;
+    border-style: solid;
+    padding: 0 8px;
+    padding-top: 5px;
+    transition: all 0.2s ease;
+}
+
+.twitter-container:hover, .linkedin-container:hover, .github-container:hover {
+    /* backdrop-filter: invert(80%); */
+    backdrop-filter: hue-rotate(45deg) saturate(200%);
+    /* background-color: #4343a9; */
+}
+
+.twitter-lottie-parent {
+    margin: 0 0;
+    padding: 0 0;
+    width: 3vw;
+    /* height: 5vw; */
+    @media (max-width: 500px) {
+        width: 10vw;
+    }
+}
+
+.linkedin-lottie-parent {
+    margin: 0 0;
+    padding: 0 0;
+    width: 3vw;
+    /* height: 5vw; */
+    @media (max-width: 500px) {
+        width: 10vw;
+    }
+}
+
+.github-lottie-parent {
+    margin: 0 0;
+    padding: 0 0;
+    width: 3vw;
+    /* height: 5vw; */
+    @media (max-width: 500px) {
+        width: 10vw;
+    }
+}
+
+.twitterLottie, .linkedinLottie, .githubLottie {
+    /* width: 100% !important; */
+    /* height: 50% !important; */
+    @media (max-width: 500px){
+        width: 8vw !important;
+    }
+}
+
+.twitter-acc, .linkedin-acc, .github-acc {
+    color: rgb(255, 255, 255);
+    font-size: 0.7em;
+    padding-left: 0.2vw;
+    padding-right: 0.2vw;
+    /* padding-top: 10px; */
+    text-decoration: none;
+    padding-bottom: 10px;
+    /* border-radius: 5px; */
+    @media (max-width: 768px) {
+        font-size: 1.1rem;
+    }
+}
+
+.twitter-acc {
+    margin-left: 1.2vw;
+}
+/* 
+.linkedin-acc {
+    margin-left: 
+} */

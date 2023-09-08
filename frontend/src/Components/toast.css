@@ -1,0 +1,43 @@
+.toast {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #22ca70;
+    color: rgb(255, 255, 255);
+    padding: 10px 20px;
+    border-radius: 15px;
+    opacity: 0;
+    visibility: hidden;
+    z-index: 1000;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75em;
+    border: 2px solid transparent;
+    @media (max-width: 550px) {
+        width: 20rem;
+        text-align: center;
+    }
+}
+  
+.toast.show {
+    animation: fadeInOut 4s ease-in-out;
+}
+  
+@keyframes fadeInOut {
+    0% {
+        opacity: 0;
+        visibility: hidden;
+    }
+    10% {
+        opacity: 1;
+        visibility: visible;
+    }
+    90% {
+        opacity: 1;
+        visibility: visible;
+    }
+    100% {
+        opacity: 0;
+        visibility: hidden;
+    }
+}  
