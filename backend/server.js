@@ -6,7 +6,8 @@ const cron = require('cron');
 const nodemailer = require('nodemailer');
 const {google} = require('googleapis');
 const { type } = require('@testing-library/user-event/dist/type');
-const test = require('dotenv').config();
+require('dotenv').config();
+const SibApiV3Sdk = require('sib-api-v3-sdk');
 
 const app = express();
 const port = 5000;
@@ -58,20 +59,11 @@ const connectDatabase = async () => {
 
 connectDatabase();
 
-const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
-  port: 465,
-  secure: true,
-  auth: {
-    type: "OAuth2",
-    user: process.env.EMAIL_USER,
-    clientId: process.env.OAUTH_CLIENT_ID,
-    clientSecret: process.env.OAUTH_CLIENT_SECRET,
-    refreshToken: process.env.OAUTH_REFRESH_TOKEN,
-    accessToken: process.env.OAUTH_ACCESS_TOKEN,
-    expires: 1484314697598,
-  },
-});
+const defaultClient = SibApiV3Sdk.ApiClient.instance;
+const apiKey = defaultClient.authentications['api-key'];
+apiKey.apiKey = process.env.BREVO_API_KEY;
+const apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
+let sendMail = new SibApiV3Sdk.SendSmtpEmail();
 
 const sendGFIEmail = async (repoURL) => {
   const apiUrl = `https://api.github.com/repos/${repoURL}/issues?labels=good%20first%20issue&&state=open`;
@@ -97,7 +89,26 @@ const sendGFIEmail = async (repoURL) => {
               text: text,
             };
 
-            transporter.sendMail(mailOptions);
+            sendMail = {
+              sender: {
+                email: process.env.EMAIL_USER,
+                name: 'Rhythm Garg',
+              },
+              to: [{
+                email: sub.email
+              }],
+              subject: subject,
+              textContent : text,
+              headers: {
+                'X-Mailin-custom': 'custom_header_1:custom_value_1|custom_header_2:custom_value_2'
+              }
+            };
+            
+            await apiInstance.sendTransacEmail(sendMail).then(function(data) {
+              console.log('API called successfully. Returned data: ' + data);
+              }, function(error) {
+                  console.error(error);
+            });
 
             sub.lastProcessedIssueId = latestIssueID;
             await sub.save();
