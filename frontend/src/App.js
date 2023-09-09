@@ -198,18 +198,16 @@ function App() {
       h1Element.removeEventListener("mouseover", handleMouseOver);
     };
   }, []);
-  
-  const handleMousePointerMove = (event) => {
-    const { clientX, clientY } = event;
-    setMousePosition({ left: clientX, top: clientY });
-  };
 
-  useEffect(() => {
-    document.addEventListener('pointermove', handleMousePointerMove);
-    return () => {
-      document.removeEventListener('pointermove', handleMousePointerMove);
-    };
-  }, []);
+  const blob = document.getElementById("blob");
+  document.body.onpointermove = event => {
+    const {clientX, clientY} = event;
+
+    blob.animate({
+      left: `${clientX}px`,
+      top: `${clientY}px`
+    }, {duration: 3000, fill: "forwards"});
+  }
 
   useEffect(() => {
     const delayAnimation = setTimeout(() => {
@@ -227,8 +225,9 @@ function App() {
   return (
     <div>
       <Navbar onAboutClick={handleAboutClick} onHomeClick={handleHomeClick}/>
+      <div id="blob"></div>
+      <div id="blur"></div>
       <div className='mainApp'>
-        <div id="blob" style={{ left: `${mousePosition.left}px`, top: `${mousePosition.top}px` }}></div>
         <div className='main'>
           <h2 data-value="Welcome to"> Welcome to</h2>
           <h1 data-value="GitNotify">GitNotify</h1>
@@ -279,9 +278,7 @@ function App() {
             {issues.map(renderIssues)}
           </div>
         </div>
-        <div id="blur"></div>
       </div>
-      
     </div>
   );
 }

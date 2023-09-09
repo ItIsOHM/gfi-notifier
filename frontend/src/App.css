@@ -21,16 +21,15 @@ body {
   background-color: rgb(131, 131, 131);
   height: 34vmax;
   aspect-ratio: 1;
-  position: absolute;
+  position: fixed;
   left: 50%;
   top: 50%;
-  translate: -50% -50%;
+  transform: translate(-50%, -50%);
+  transform-origin: 0% 0%;
   border-radius: 50%;
   background: linear-gradient(45deg,#5893f1, #24AADB , #27DBB1);
   background-size: 600% 100%;
-  animation: rotate 20s infinite;
-  animation: gradient 10s linear infinite;
-  animation-direction: alternate;
+  animation: rotate 10s ease-in-out infinite, gradient 10s linear infinite;
   opacity: 1;
   z-index: 1;
   @media (hover: none) {
@@ -235,7 +234,7 @@ h2 {
   }
   
   50% {
-    scale: 1 1.5;
+    scale: 1.5 1;
   }
   
   to {
@@ -245,7 +244,8 @@ h2 {
 
 @keyframes gradient {
   0% {background-position: 0%}
-  100% {background-position: 100%}
+  50% {background-position: 100%}
+  100% {background-position: 0%}
 }
 
 @import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap');
