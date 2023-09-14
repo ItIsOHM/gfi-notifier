@@ -125,3 +125,5 @@ package.json
 package-lock.json
 frontend/src/Assets/TwitterLogoAEP.aep
 Marketing/
+backend/app.yaml
+.gitignore

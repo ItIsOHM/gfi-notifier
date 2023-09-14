@@ -14,7 +14,6 @@ function App() {
   const [error, setError] = useState("");
   const [sendEmails, setSendEmails] = useState(false);
   let [isValidEmail, setIsValidEmail] = useState(true);
-  const [mousePosition, setMousePosition] = useState({ left: 0, top: 0 });
   const [showAbout, setShowAbout] = useState(false);
   const [subSuccess, setSubSuccess] = useState(false);
 
@@ -230,7 +229,7 @@ function App() {
       <div className='mainApp'>
         <div className='main'>
           <h2 data-value="Welcome to"> Welcome to</h2>
-          <h1 data-value="GitNotify">GitNotify</h1>
+          <h1 data-value="GitAlert">GitAlert</h1>
           {showAbout ?
             (<div className='opacity-animated' style={{zIndex : 999}}>
               <About />
@@ -274,7 +273,7 @@ function App() {
               onClose={() => setSubSuccess(false)}
             />
           )}
-          <div className='issues' style={{height: issues.length == 0 ? `0vh` : `25vh`}}>
+          <div className='issues' style={{height: issues.length === 0 ? `0vh` : `25vh`}}>
             {issues.map(renderIssues)}
           </div>
         </div>

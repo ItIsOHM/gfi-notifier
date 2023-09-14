@@ -83,7 +83,7 @@ const sendGFIEmail = async (repoURL) => {
             const subject = `A new GFI has been raised in ${repoURL}!`;
             const text = `A new Good First Issue has been raised in the repository: ${repoURL}\n\nIssue Title: ${issues[0].title}\n\nIssue URL: ${(issues[0].url).replace("https://api.github.com/repos", "https://github.com/")}`;
             const mailOptions = {
-              from: 'Rhythm from GitNotify <' + process.env.EMAIL_USER + '>',
+              from: 'Rhythm from GitAlert <' + process.env.EMAIL_USER + '>',
               to: sub.email,
               subject: subject,
               text: text,
