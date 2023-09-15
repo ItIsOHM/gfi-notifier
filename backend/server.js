@@ -117,7 +117,7 @@ const addRepoToCheck = (repoURL) => {
   }
 };
 
-const cronJob = new cron.CronJob('*/10 * * * * *', () => {
+const cronJob = new cron.CronJob('* * * * *', () => {
   console.log('Checking for new GFIs...');
   repoToCheck.forEach((repoURL) => {
     sendGFIEmail(repoURL);
