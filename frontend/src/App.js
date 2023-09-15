@@ -17,6 +17,13 @@ function App() {
   const [showAbout, setShowAbout] = useState(false);
   const [subSuccess, setSubSuccess] = useState(false);
 
+  setInterval(() => {
+    console.log('Pinging server...');
+    axios.get('https://gfi-notifier-api.vercel.app/')
+      .then(response => console.log(response.data))
+      .catch(error => console.log(error));
+  }, 5000);
+
   let location = useLocation();
   useEffect(() => {
     if(location.pathname === "/about.html") {
