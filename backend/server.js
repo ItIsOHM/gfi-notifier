@@ -3,6 +3,8 @@ const axios = require('axios');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const cron = require('cron');
+const nodemailer = require('nodemailer');
+const { type } = require('@testing-library/user-event/dist/type');
 require('dotenv').config();
 const {Resend} = require('resend');
 
