@@ -26,7 +26,13 @@ app.post('/getGFI', async (req, res) => {
   const apiUrl = `https://api.github.com/repos/${repo}/issues?labels=good%20first%20issue&&state=open`;
   // console.log(apiUrl);
   try {
-    const response = await axios.get(apiUrl);
+    const response = await axios.get(
+      apiUrl,
+      {
+        headers: {
+          'Authorization': process.env.GITHUB_ACCESS_TOKEN
+        }
+      });
     const issues = response.data;
     // console.log(issues);
     res.status(200).json(issues);
@@ -63,7 +69,13 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 const sendGFIEmail = async (repoURL) => {
   const apiUrl = `https://api.github.com/repos/${repoURL}/issues?labels=good%20first%20issue&&state=open`;
   try {
-    const response = await axios.get(apiUrl);
+    const response = await axios.get(
+      apiUrl,
+      {
+        headers: {
+          'Authorization': process.env.GITHUB_ACCESS_TOKEN
+        }
+      });
     const issues = response.data;
 
     try {
