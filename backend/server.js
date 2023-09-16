@@ -9,7 +9,7 @@ require('dotenv').config();
 const {Resend} = require('resend');
 
 const app = express();
-const port = 5000;
+const port = process.env.PORT || 5000;
 
 const DB_URL = process.env.DB_URI;
 

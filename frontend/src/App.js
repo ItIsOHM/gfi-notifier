@@ -17,13 +17,6 @@ function App() {
   const [showAbout, setShowAbout] = useState(false);
   const [subSuccess, setSubSuccess] = useState(false);
 
-  setInterval(() => {
-    console.log('Pinging server...');
-    axios.get('https://gfi-notifier-api.vercel.app/')
-      .then(response => console.log(response.data))
-      .catch(error => console.log(error));
-  }, 5000);
-
   let location = useLocation();
   useEffect(() => {
     if(location.pathname === "/about.html") {
@@ -106,7 +99,7 @@ function App() {
     setError("");
 
     try {
-      const response = await axios.post('https://gfi-notifier-api.vercel.app/getGFI', null, {params : {repoURL}});
+      const response = await axios.post('http://git-alert-server-dev.ap-south-1.elasticbeanstalk.com/getGFI', null, {params : {repoURL}});
 
       setLoading(false);
       if(response.data.length === 0)
@@ -116,7 +109,7 @@ function App() {
 
       if(sendEmails) {
       try {
-        const response = await axios.post('https://gfi-notifier-api.vercel.app/subscribe', null, {params : {repoURL, email}});
+        const response = await axios.post('http://git-alert-server-dev.ap-south-1.elasticbeanstalk.com/subscribe', null, {params : {repoURL, email}});
         console.log(response.data);
         showSubSuccessMessage();
       } catch (error) {
@@ -154,10 +147,10 @@ function App() {
       <div className='issue-row' key={issues.number}>
         <p>
         <span className="truncate-text">Issue Name : {issues.title}</span> &ensp;
-        <a className ='issue-url' href={websiteURL} target="_blank">
+        <a className ='issue-url' href={websiteURL} target="_blank" rel="noreferrer">
           Visit issue here <img src='external-link.svg' alt="External Link Icon" className='ext-svg'/>
         </a><br/>
-        Raised by : <a className ='user-url' href={usersURL} target="_blank">
+        Raised by : <a className ='user-url' href={usersURL} target="_blank" rel="noreferrer">
           {issues.user.login} <img src='external-link.svg' alt="External Link Icon" className='ext-svg'/>
         </a><br/>
         Created on : {formattedDate}.<br/>
