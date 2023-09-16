@@ -99,7 +99,7 @@ function App() {
     setError("");
 
     try {
-      const response = await axios.post('http://git-alert-server-dev.ap-south-1.elasticbeanstalk.com/getGFI', null, {params : {repoURL}});
+      const response = await axios.post('https://git-alert-server-dev.ap-south-1.elasticbeanstalk.com/getGFI', null, {params : {repoURL}});
 
       setLoading(false);
       if(response.data.length === 0)
@@ -109,7 +109,7 @@ function App() {
 
       if(sendEmails) {
       try {
-        const response = await axios.post('http://git-alert-server-dev.ap-south-1.elasticbeanstalk.com/subscribe', null, {params : {repoURL, email}});
+        const response = await axios.post('https://git-alert-server-dev.ap-south-1.elasticbeanstalk.com/subscribe', null, {params : {repoURL, email}});
         console.log(response.data);
         showSubSuccessMessage();
       } catch (error) {
