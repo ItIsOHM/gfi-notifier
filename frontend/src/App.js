@@ -273,9 +273,11 @@ function App() {
               onClose={() => setSubSuccess(false)}
             />
           )}
-          <div className='issues' style={{height: issues.length === 0 ? `0vh` : `25vh`}}>
+          {!showAbout && (
+            <div className='issues' style={{height: issues.length === 0 ? `0vh` : `25vh`}}>
             {issues.map(renderIssues)}
-          </div>
+            </div>
+          )}
         </div>
       </div>
     </div>
