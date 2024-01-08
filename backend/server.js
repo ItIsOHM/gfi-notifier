@@ -1,12 +1,13 @@
-const express = require('express');
-const axios = require('axios');
-const cors = require('cors');
-const mongoose = require('mongoose');
-const cron = require('cron');
-const nodemailer = require('nodemailer');
-const { type } = require('@testing-library/user-event/dist/type');
-require('dotenv').config();
-const {Resend} = require('resend');
+import express from "express";
+import axios from "axios";
+import cors from "cors";
+import mongoose from "mongoose";
+import cron from "cron";
+import nodemailer from "nodemailer";
+import { type } from "@testing-library/user-event/dist/type/index.js";
+import {Resend} from "resend";
+import dotenv from "dotenv";
+dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 5000;
