@@ -265,6 +265,9 @@ function App() {
               <div className='searchButtonContainer'>
                 <button className='searchButton' onClick={handleSubmit}> {loading ? "Searching..." : "Search"} </button>
               </div>
+              <div className='issues' style={{height: issues.length === 0 ? `0vh` : `25vh`}}>
+                {issues.map(renderIssues)}
+              </div>
             </form>
           )}
           {subSuccess && (
@@ -273,9 +276,6 @@ function App() {
               onClose={() => setSubSuccess(false)}
             />
           )}
-          <div className='issues' style={{height: issues.length === 0 ? `0vh` : `25vh`}}>
-            {issues.map(renderIssues)}
-          </div>
         </div>
       </div>
     </div>
