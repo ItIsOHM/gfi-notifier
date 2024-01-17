@@ -5,7 +5,7 @@ import mongoose from "mongoose";
 import cron from "cron";
 import nodemailer from "nodemailer";
 import { type } from "@testing-library/user-event/dist/type/index.js";
-import {Resend} from "resend";
+import { Resend } from "resend";
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -80,15 +80,15 @@ const sendGFIEmail = async (repoURL) => {
     const issues = response.data;
 
     try {
-      const subscribed = await Subscription.find({repoURL});
+      const subscribed = await Subscription.find({ repoURL });
 
-      if(issues.length > 0 && subscribed.length > 0) {
+      if (issues.length > 0 && subscribed.length > 0) {
         let lastProcessedIssueId = subscribed[0].lastProcessedIssueId || 0;
         const latestIssueID = issues[0].number;
 
-        if(latestIssueID > lastProcessedIssueId) {
+        if (latestIssueID > lastProcessedIssueId) {
           subscribed.forEach(async (sub) => {
-            if(sub.lastProcessedIssueId < latestIssueID) {
+            if (sub.lastProcessedIssueId < latestIssueID) {
               const subject = `A new GFI has been raised in ${repoURL}!`;
               const text = `A new Good First Issue has been raised in the repository: ${repoURL}\n\nIssue Title: ${issues[0].title}\n\nIssue URL: ${(issues[0].url).replace("https://api.github.com/repos", "https://github.com/")}`;
 
@@ -117,25 +117,35 @@ const sendGFIEmail = async (repoURL) => {
       })
       console.log("Couldn't find subscribed repo: ", error);
     }
-  } catch(error) {
+  } catch (error) {
     console.error('Error fetching GFIs:', error);
   }
 };
 
 const repoToCheck = [];
 const addRepoToCheck = (repoURL) => {
-  if(!repoToCheck.includes(repoURL)) {
+  if (!repoToCheck.includes(repoURL)) {
     repoToCheck.push(repoURL);
     console.log(`Added ${repoURL} to repoToCheck.`);
   }
 };
 
-const cronJob = new cron.CronJob('* * * * *', () => {
+const cronJob = new cron.CronJob('* * * * *', async () => {
   console.log('Checking for new GFIs...');
-  repoToCheck.forEach((repoURL) => {
-    sendGFIEmail(repoURL);
-    console.log(`Trying to send an email for ${repoURL}.`)
-  });
+  try {
+    if (repoToCheck.length == 0) {
+      const repoData = await Subscription.find({});
+      repoData.forEach((repos) => {
+        repoToCheck.push(repos.repoURL);
+      });
+    }
+    repoToCheck.forEach((repoURL) => {
+      sendGFIEmail(repoURL);
+      console.log(`Trying to send an email for ${repoURL}.`)
+    });
+  } catch (error) {
+    console.log(error.message);
+  }
 });
 cronJob.start();
 
@@ -144,27 +154,27 @@ app.post('/subscribe', async (req, res) => {
   const email = req.query.email;
   console.log(repoURL, email);
 
-  const existingSub = await Subscription.findOne({repoURL, email});
+  const existingSub = await Subscription.findOne({ repoURL, email });
 
-  if(existingSub) {
+  if (existingSub) {
     return res.status(500).json({
-      error : 'You are already subscribed to this repository.'
+      error: 'You are already subscribed to this repository.'
     })
   }
 
-  const newSub = new Subscription({repoURL,  email});
+  const newSub = new Subscription({ repoURL, email });
   await newSub.save();
 
   try {
     res.status(200).json({
-      message : 'Subscribed successfully! :D'
+      message: 'Subscribed successfully! :D'
     })
     addRepoToCheck(repoURL);
     await Subscription.findOneAndUpdate(
       { repoURL, email },
       { lastProcessedIssueId: 0 }
     );
-  } catch(error) {
+  } catch (error) {
     res.status(500).json({
       error: `We're having an error subscibing you.`
     })
