@@ -101,6 +101,16 @@ h2 {
   font-size: 0.75em;
 }
 
+.repoInput {
+  border: 5px solid #292966;
+  outline: none;
+  transition: all .3s;
+}
+
+.repoInput:focus {
+  border: 5px solid #24AADB;
+}
+
 @media (max-width: 500px) {
   .repoInput, .emailInput {
     font-size: 0.65em;
