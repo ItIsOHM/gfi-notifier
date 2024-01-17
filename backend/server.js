@@ -131,6 +131,7 @@ const addRepoToCheck = (repoURL) => {
 };
 
 const cronJob = new cron.CronJob('* * * * *', async () => {
+  
   console.log('Checking for new GFIs...');
   try {
     if (repoToCheck.length == 0) {
