@@ -135,9 +135,10 @@ const cronJob = new cron.CronJob('* * * * *', async () => {
   console.log('Checking for new GFIs...');
   try {
     if (repoToCheck.length == 0) {
-      const repoData = await Subscription.find({});
+      let repoData = await Subscription.find({});
+      repoData = [...new Set(repoData.map(item => item.repourl))];
       repoData.forEach((repos) => {
-        repoToCheck.push(repos.repoURL);
+        repoToCheck.push(repos);
       });
     }
     repoToCheck.forEach((repoURL) => {
