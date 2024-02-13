@@ -136,7 +136,7 @@ const cronJob = new cron.CronJob('* * * * *', async () => {
   try {
     if (repoToCheck.length == 0) {
       let repoData = await Subscription.find({});
-      repoData = [...new Set(repoData.map(item => item.repourl))];
+      repoData = [...new Set(repoData.map(item => item.repoUrl))];
       repoData.forEach((repos) => {
         repoToCheck.push(repos);
       });
