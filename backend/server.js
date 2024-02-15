@@ -17,28 +17,26 @@ const DB_URL = process.env.DB_URI;
 app.use(express.json());
 app.use(cors());
 
-app.get('/', async (req, res) => {
-  res.json("Hello World.")
+app.get("/", async (req, res) => {
+  res.json("Hello World.");
 });
 
-app.post('/getGFI', async (req, res) => {
+app.post("/getGFI", async (req, res) => {
   const repo = req.query.repoURL;
   // console.log(repo);
   const apiUrl = `https://api.github.com/repos/${repo}/issues?labels=good%20first%20issue&&state=open`;
   // console.log(apiUrl);
   try {
-    const response = await axios.get(
-      apiUrl,
-      {
-        headers: {
-          'Authorization': process.env.GITHUB_ACCESS_TOKEN
-        }
-      });
+    const response = await axios.get(apiUrl, {
+      "headers": {
+        "Authorization" : "token " + `${process.env.GITHUB_ACCESS_TOKEN}`,
+      },
+    });
     const issues = response.data;
     // console.log(issues);
     res.status(200).json(issues);
   } catch (error) {
-    res.status(500).json({ error: 'Error fetching issues in back' });
+    res.status(500).json({ error: "Error fetching issues in back" });
   }
 });
 
@@ -48,7 +46,7 @@ const subSchema = new mongoose.Schema({
   lastProcessedIssueId: Number,
 });
 
-const Subscription = mongoose.model('Subscription', subSchema);
+const Subscription = mongoose.model("Subscription", subSchema);
 
 const connectDatabase = async () => {
   try {
@@ -70,13 +68,11 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 const sendGFIEmail = async (repoURL) => {
   const apiUrl = `https://api.github.com/repos/${repoURL}/issues?labels=good%20first%20issue&&state=open`;
   try {
-    const response = await axios.get(
-      apiUrl,
-      {
-        headers: {
-          'Authorization': process.env.GITHUB_ACCESS_TOKEN
-        }
-      });
+    const response = await axios.get(apiUrl, {
+      "headers": {
+        "Authorization" : "token " + `${process.env.GITHUB_ACCESS_TOKEN}`,
+      },
+    });
     const issues = response.data;
 
     try {
@@ -90,11 +86,16 @@ const sendGFIEmail = async (repoURL) => {
           subscribed.forEach(async (sub) => {
             if (sub.lastProcessedIssueId < latestIssueID) {
               const subject = `A new GFI has been raised in ${repoURL}!`;
-              const text = `A new Good First Issue has been raised in the repository: ${repoURL}\n\nIssue Title: ${issues[0].title}\n\nIssue URL: ${(issues[0].url).replace("https://api.github.com/repos", "https://github.com/")}`;
+              const text = `A new Good First Issue has been raised in the repository: ${repoURL}\n\nIssue Title: ${
+                issues[0].title
+              }\n\nIssue URL: ${issues[0].url.replace(
+                "https://api.github.com/repos",
+                "https://github.com/"
+              )}`;
 
               try {
                 const mail = await resend.emails.send({
-                  from: 'Rhythm from GitAlert <rhythm@gitalert.me>',
+                  from: "Rhythm from GitAlert <rhythm@gitalert.me>",
                   to: sub.email,
                   subject: subject,
                   text: text,
@@ -113,8 +114,8 @@ const sendGFIEmail = async (repoURL) => {
       }
     } catch (error) {
       res.status(500).json({
-        error: `No subscribed repos found.`
-      })
+        error: `No subscribed repos found.`,
+      });
       console.log("Couldn't find subscribed repo: ", error);
     }
   } catch (error) {
@@ -151,7 +152,7 @@ const cronJob = new cron.CronJob('* * * * *', async () => {
 });
 cronJob.start();
 
-app.post('/subscribe', async (req, res) => {
+app.post("/subscribe", async (req, res) => {
   const repoURL = req.query.repoURL;
   const email = req.query.email;
   console.log(repoURL, email);
@@ -178,10 +179,10 @@ app.post('/subscribe', async (req, res) => {
     );
   } catch (error) {
     res.status(500).json({
-      error: `We're having an error subscibing you.`
-    })
+      error: `We're having an error subscibing you.`,
+    });
   }
-})
+});
 
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
