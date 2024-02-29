@@ -1,12 +1,13 @@
-const express = require("express");
-const axios = require("axios");
-const cors = require("cors");
-const mongoose = require("mongoose");
-const cron = require("cron");
-const nodemailer = require("nodemailer");
-const { type } = require("@testing-library/user-event/dist/type");
-require("dotenv").config();
-const { Resend } = require("resend");
+import express from "express";
+import axios from "axios";
+import cors from "cors";
+import mongoose from "mongoose";
+import cron from "cron";
+import nodemailer from "nodemailer";
+import { type } from "@testing-library/user-event/dist/type/index.js";
+import { Resend } from "resend";
+import dotenv from "dotenv";
+dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -118,7 +119,7 @@ const sendGFIEmail = async (repoURL) => {
       console.log("Couldn't find subscribed repo: ", error);
     }
   } catch (error) {
-    console.error("Error fetching GFIs:", error);
+    console.error('Error fetching GFIs:', error);
   }
 };
 
@@ -130,12 +131,24 @@ const addRepoToCheck = (repoURL) => {
   }
 };
 
-const cronJob = new cron.CronJob("* * * * *", () => {
-  console.log("Checking for new GFIs...");
-  repoToCheck.forEach((repoURL) => {
-    sendGFIEmail(repoURL);
-    console.log(`Trying to send an email for ${repoURL}.`);
-  });
+const cronJob = new cron.CronJob('* * * * *', async () => {
+  
+  console.log('Checking for new GFIs...');
+  try {
+    if (repoToCheck.length == 0) {
+      let repoData = await Subscription.find({});
+      repoData = [...new Set(repoData.map(item => item.repoURL))];
+      repoData.forEach((repos) => {
+        repoToCheck.push(repos);
+      });
+    }
+    repoToCheck.forEach((repoURL) => {
+      sendGFIEmail(repoURL);
+      console.log(`Trying to send an email for ${repoURL}.`)
+    });
+  } catch (error) {
+    console.log(error.message);
+  }
 });
 cronJob.start();
 
@@ -148,8 +161,8 @@ app.post("/subscribe", async (req, res) => {
 
   if (existingSub) {
     return res.status(500).json({
-      error: "You are already subscribed to this repository.",
-    });
+      error: 'You are already subscribed to this repository.'
+    })
   }
 
   const newSub = new Subscription({ repoURL, email });
@@ -157,8 +170,8 @@ app.post("/subscribe", async (req, res) => {
 
   try {
     res.status(200).json({
-      message: "Subscribed successfully! :D",
-    });
+      message: 'Subscribed successfully! :D'
+    })
     addRepoToCheck(repoURL);
     await Subscription.findOneAndUpdate(
       { repoURL, email },
